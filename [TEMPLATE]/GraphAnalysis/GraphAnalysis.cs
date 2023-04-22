@@ -25,87 +25,55 @@ namespace Problem
         /// <param name="startVertex">name of the start vertex to begin from it</param>
         /// <returns>return array of 3 numbers: outputs[0] number of backward edges, outputs[1] number of forward edges, outputs[2] number of cross edges</returns>
 
-        private static Dictionary<string, List<string>> adj; // adjacency list
+        private static Dictionary<string, int> discoveryTime = new Dictionary<string, int>();
         private static Dictionary<string, int> color = new Dictionary<string, int>();
-        private static Dictionary<string, string> parent = new Dictionary<string, string>();
-        private static Dictionary<string, int> d = new Dictionary<string, int>();
-        private static Dictionary<string, int> f = new Dictionary<string, int>();
-        private static int time = 0, backward = 0, forward = 0, cross = 0;
+        private static int time = 0;
 
-        public static void DFS(string startVertex)
-        {
-            // initialize color, parent, d, and f dictionaries
-            foreach (string vertex in adj.Keys)
-            {
-                color[vertex] = 0; // WHITE
-                parent[vertex] = null; // NIL
-                d[vertex] = 0;
-                f[vertex] = 0;
-            }
-            DFSVisit(startVertex);
-            // call DFSVisit on startVertex
-            foreach (string u in adj.Keys)
-                if (color[u] == 0)
-                    DFSVisit(u);
-        }
-
-        private static void DFSVisit(string u)
-        {
-            color[u] = 1; // GRAY
-            time++;
-            d[u] = time;
-
-            foreach (string v in adj[u])
-            {
-                if (color[v] == 0) // WHITE
-                {
-                    parent[v] = u;
-                    DFSVisit(v);
-                }
-                else if (color[v] == 1)
-                    backward++;
-                else
-                {
-                    if (d[u] < d[v])
-                        forward++;
-                    else
-                        cross++;
-                }
-            }
-
-            color[u] = 2; // BLACK
-            time++;
-            f[u] = time;
-        }
         public static int[] AnalyzeEdges(string[] vertices, KeyValuePair<string, string>[] edges, string startVertex)
         {
             //REMOVE THIS LINE BEFORE START CODING
             //throw new NotImplementedException();
-            int[] result = new int[3];
-            adj = new Dictionary<string, List<string>>();
 
-            // add vertices to adjacency list
+            int[] result = new int[3];
+
+            Dictionary<string, List<string>> graph = new Dictionary<string, List<string>>();
+
             foreach (string vertex in vertices)
             {
-                adj[vertex] = new List<string>();
+                graph[vertex] = new List<string>();
+                color[vertex] = 0;  //WHITE
             }
 
-            // add edges to adjacency list
             foreach (KeyValuePair<string, string> edge in edges)
-            {
-                adj[edge.Key].Add(edge.Value);
-                adj[edge.Value].Add(edge.Key);
-            }
+                graph[edge.Key].Add(edge.Value);
 
-            DFS(startVertex);
-
-            result[0] = backward;
-            result[1] = forward;
-            result[2] = cross;
+            DFS(startVertex, graph, result);
 
             return result;
         }
 
+        private static void DFS(string vertex, Dictionary<string, List<string>> graph, int[] result)
+        {
+            color[vertex] = 1; //GRAY
+            time++;
+            discoveryTime[vertex] = time;
+
+            foreach (string adjacentVertex in graph[vertex])
+            {
+                if (color[adjacentVertex] == 0)
+                    DFS(adjacentVertex, graph, result);
+                else if (color[adjacentVertex] == 1)         //(graph[adjacentVertex].Contains(vertex))
+                    result[0]++;
+                else
+                {
+                    if (discoveryTime[vertex] < discoveryTime[adjacentVertex])
+                        result[1]++;
+                    else
+                        result[2]++;
+                }
+            }
+            color[vertex] = 2;
+        }
         #endregion
     }
 }
