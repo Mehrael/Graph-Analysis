@@ -25,34 +25,52 @@ namespace Problem
         /// <param name="startVertex">name of the start vertex to begin from it</param>
         /// <returns>return array of 3 numbers: outputs[0] number of backward edges, outputs[1] number of forward edges, outputs[2] number of cross edges</returns>
 
-        private static Dictionary<string, int> discoveryTime = new Dictionary<string, int>();
-        private static Dictionary<string, int> color = new Dictionary<string, int>();
         private static int time = 0;
 
         public static int[] AnalyzeEdges(string[] vertices, KeyValuePair<string, string>[] edges, string startVertex)
         {
             //REMOVE THIS LINE BEFORE START CODING
             //throw new NotImplementedException();
-
+            //Console.WriteLine(startVertex + "**************************");
             int[] result = new int[3];
 
-            Dictionary<string, List<string>> graph = new Dictionary<string, List<string>>();
+            Dictionary<string, Stack<string>> graph = new Dictionary<string, Stack<string>>();
+            Dictionary<string, int> discoveryTime = new Dictionary<string, int>();
+            Dictionary<string, int> color = new Dictionary<string, int>();
 
             foreach (string vertex in vertices)
             {
-                graph[vertex] = new List<string>();
+                graph[vertex] = new Stack<string>();
                 color[vertex] = 0;  //WHITE
             }
 
             foreach (KeyValuePair<string, string> edge in edges)
-                graph[edge.Key].Add(edge.Value);
+                graph[edge.Key].Push(edge.Value);
 
-            DFS(startVertex, graph, result);
+            //foreach (KeyValuePair<string, Stack<string>> item in graph)
+            //{
+            //    Console.WriteLine(item.Key + "{");
+            //    foreach (var lst in item.Value)
+            //    {
+            //        Console.WriteLine(lst);
+            //    }
+            //    Console.WriteLine("}");
+            //    Console.WriteLine();
+            //}
+
+            DFS(startVertex, graph, discoveryTime, color, result);
+
+            //foreach(KeyValuePair<string, List<string>> vertex in graph)
+            //{
+            //    if (color[vertex.Key] == 0)
+            //        DFS(vertex.Key, graph, discoveryTime, color, result);
+
+            //}
 
             return result;
         }
 
-        private static void DFS(string vertex, Dictionary<string, List<string>> graph, int[] result)
+        private static void DFS(string vertex, Dictionary<string, Stack<string>> graph, Dictionary<string, int> discoveryTime, Dictionary<string, int> color, int[] result)
         {
             color[vertex] = 1; //GRAY
             time++;
@@ -61,18 +79,27 @@ namespace Problem
             foreach (string adjacentVertex in graph[vertex])
             {
                 if (color[adjacentVertex] == 0)
-                    DFS(adjacentVertex, graph, result);
+                    DFS(adjacentVertex, graph, discoveryTime, color, result);
                 else if (color[adjacentVertex] == 1)         //(graph[adjacentVertex].Contains(vertex))
+                {
                     result[0]++;
+                    //Console.WriteLine(adjacentVertex + " BACK");
+                }
                 else
                 {
                     if (discoveryTime[vertex] < discoveryTime[adjacentVertex])
+                    {
                         result[1]++;
+                        //Console.WriteLine(adjacentVertex + " FOR");
+                    }
                     else
+                    {
                         result[2]++;
+                        //Console.WriteLine(adjacentVertex + " CROSS");
+                    }
                 }
             }
-            color[vertex] = 2;
+            color[vertex] = 2;  //BLACK
         }
         #endregion
     }
