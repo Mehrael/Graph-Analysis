@@ -34,18 +34,23 @@ namespace Problem
             //Console.WriteLine(startVertex + "**************************");
             int[] result = new int[3];
 
-            Dictionary<string, SortedSet<string>> graph = new Dictionary<string, SortedSet<string>>();
+            Dictionary<string, List<string>> graph = new Dictionary<string, List<string>>();
             Dictionary<string, int> discoveryTime = new Dictionary<string, int>();
             Dictionary<string, int> color = new Dictionary<string, int>();
 
             foreach (string vertex in vertices)
             {
-                graph[vertex] = new SortedSet<string>();
+                graph[vertex] = new List<string>();
                 color[vertex] = 0;  //WHITE
             }
 
             foreach (KeyValuePair<string, string> edge in edges)
                 graph[edge.Key].Add(edge.Value);
+
+            foreach (KeyValuePair<string, List<string>> adjacentVertcies in graph)
+                if(adjacentVertcies.Value.Count > 1)
+                    adjacentVertcies.Value.Sort();
+  
 
             //foreach (KeyValuePair<string, Stack<string>> item in graph)
             //{
@@ -70,7 +75,7 @@ namespace Problem
             return result;
         }
 
-        private static void DFS(string vertex, Dictionary<string, SortedSet<string>> graph, Dictionary<string, int> discoveryTime, Dictionary<string, int> color, int[] result)
+        private static void DFS(string vertex, Dictionary<string, List<string>> graph, Dictionary<string, int> discoveryTime, Dictionary<string, int> color, int[] result)
         {
             color[vertex] = 1; //GRAY
             time++;
