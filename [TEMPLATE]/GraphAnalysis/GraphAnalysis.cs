@@ -31,7 +31,7 @@ namespace Problem
         {
             //REMOVE THIS LINE BEFORE START CODING
             //throw new NotImplementedException();
-            //Console.WriteLine(startVertex + "**************************");
+
             int[] result = new int[3];
 
             Dictionary<string, List<string>> graph = new Dictionary<string, List<string>>();
@@ -47,30 +47,11 @@ namespace Problem
             foreach (KeyValuePair<string, string> edge in edges)
                 graph[edge.Key].Add(edge.Value);
 
-            foreach (KeyValuePair<string, List<string>> adjacentVertcies in graph)
-                if(adjacentVertcies.Value.Count > 1)
-                    adjacentVertcies.Value.Sort();
-  
-
-            //foreach (KeyValuePair<string, Stack<string>> item in graph)
-            //{
-            //    Console.WriteLine(item.Key + "{");
-            //    foreach (var lst in item.Value)
-            //    {
-            //        Console.WriteLine(lst);
-            //    }
-            //    Console.WriteLine("}");
-            //    Console.WriteLine();
-            //}
+            foreach (string vertex in vertices)
+                if (graph[vertex].Count > 1)
+                    graph[vertex].Sort();
 
             DFS(startVertex, graph, discoveryTime, color, result);
-
-            //foreach(KeyValuePair<string, List<string>> vertex in graph)
-            //{
-            //    if (color[vertex.Key] == 0)
-            //        DFS(vertex.Key, graph, discoveryTime, color, result);
-
-            //}
 
             return result;
         }
@@ -82,28 +63,16 @@ namespace Problem
             discoveryTime[vertex] = time;
 
             foreach (string adjacentVertex in graph[vertex])
-            {
                 if (color[adjacentVertex] == 0)
                     DFS(adjacentVertex, graph, discoveryTime, color, result);
                 else if (color[adjacentVertex] == 1)
-                {
                     result[0]++;
-                    //Console.WriteLine(adjacentVertex + " BACK ,time= " + time);
-                }
                 else
-                {
                     if (discoveryTime[vertex] < discoveryTime[adjacentVertex])
-                    {
                         result[1]++;
-                        //Console.WriteLine(adjacentVertex + " FOR ,time= " + time);
-                    }
                     else
-                    {
                         result[2]++;
-                        //Console.WriteLine(adjacentVertex + " CROSS ,time= " + time);
-                    }
-                }
-            }
+
             color[vertex] = 2;  //BLACK
         }
         #endregion
