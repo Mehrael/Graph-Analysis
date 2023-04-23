@@ -34,18 +34,18 @@ namespace Problem
             //Console.WriteLine(startVertex + "**************************");
             int[] result = new int[3];
 
-            Dictionary<string, Stack<string>> graph = new Dictionary<string, Stack<string>>();
+            Dictionary<string, SortedSet<string>> graph = new Dictionary<string, SortedSet<string>>();
             Dictionary<string, int> discoveryTime = new Dictionary<string, int>();
             Dictionary<string, int> color = new Dictionary<string, int>();
 
             foreach (string vertex in vertices)
             {
-                graph[vertex] = new Stack<string>();
+                graph[vertex] = new SortedSet<string>();
                 color[vertex] = 0;  //WHITE
             }
 
             foreach (KeyValuePair<string, string> edge in edges)
-                graph[edge.Key].Push(edge.Value);
+                graph[edge.Key].Add(edge.Value);
 
             //foreach (KeyValuePair<string, Stack<string>> item in graph)
             //{
@@ -70,7 +70,7 @@ namespace Problem
             return result;
         }
 
-        private static void DFS(string vertex, Dictionary<string, Stack<string>> graph, Dictionary<string, int> discoveryTime, Dictionary<string, int> color, int[] result)
+        private static void DFS(string vertex, Dictionary<string, SortedSet<string>> graph, Dictionary<string, int> discoveryTime, Dictionary<string, int> color, int[] result)
         {
             color[vertex] = 1; //GRAY
             time++;
@@ -80,22 +80,22 @@ namespace Problem
             {
                 if (color[adjacentVertex] == 0)
                     DFS(adjacentVertex, graph, discoveryTime, color, result);
-                else if (color[adjacentVertex] == 1)         //(graph[adjacentVertex].Contains(vertex))
+                else if (color[adjacentVertex] == 1)
                 {
                     result[0]++;
-                    //Console.WriteLine(adjacentVertex + " BACK");
+                    //Console.WriteLine(adjacentVertex + " BACK ,time= " + time);
                 }
                 else
                 {
                     if (discoveryTime[vertex] < discoveryTime[adjacentVertex])
                     {
                         result[1]++;
-                        //Console.WriteLine(adjacentVertex + " FOR");
+                        //Console.WriteLine(adjacentVertex + " FOR ,time= " + time);
                     }
                     else
                     {
                         result[2]++;
-                        //Console.WriteLine(adjacentVertex + " CROSS");
+                        //Console.WriteLine(adjacentVertex + " CROSS ,time= " + time);
                     }
                 }
             }
