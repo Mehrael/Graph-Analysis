@@ -47,11 +47,12 @@ namespace Problem
             foreach (KeyValuePair<string, string> edge in edges)
                 graph[edge.Key].Add(edge.Value);
 
-            foreach (string vertex in vertices)
-                if (graph[vertex].Count > 1)
-                    graph[vertex].Sort();
+            foreach (KeyValuePair<string, List<string>> vertex in graph)
+                if (vertex.Value.Count > 1)
+                    vertex.Value.Sort();
 
             DFS(startVertex, graph, discoveryTime, color, result);
+
 
             return result;
         }
@@ -69,9 +70,9 @@ namespace Problem
                     result[0]++;
                 else
                     if (discoveryTime[vertex] < discoveryTime[adjacentVertex])
-                        result[1]++;
-                    else
-                        result[2]++;
+                    result[1]++;
+                else
+                    result[2]++;
 
             color[vertex] = 2;  //BLACK
         }
