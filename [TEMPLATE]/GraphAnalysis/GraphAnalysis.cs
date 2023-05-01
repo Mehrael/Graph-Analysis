@@ -38,21 +38,20 @@ namespace Problem
             Dictionary<string, int> discoveryTime = new Dictionary<string, int>();
             Dictionary<string, int> color = new Dictionary<string, int>();
 
-            foreach (string vertex in vertices)
+            for (int i = 0; i < vertices.Length; i++)
             {
-                graph[vertex] = new List<string>();
-                color[vertex] = 0;  //WHITE
+                graph[vertices[i]] = new List<string>();
+                color[vertices[i]] = 0;  //WHITE
             }
 
-            foreach (KeyValuePair<string, string> edge in edges)
-                graph[edge.Key].Add(edge.Value);
+            for (int i = 0; i < edges.Length; i++)
+                graph[edges[i].Key].Add(edges[i].Value);
 
             foreach (KeyValuePair<string, List<string>> vertex in graph)
                 if (vertex.Value.Count > 1)
                     vertex.Value.Sort();
 
             DFS(startVertex, graph, discoveryTime, color, result);
-
 
             return result;
         }
