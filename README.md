@@ -6,4 +6,4 @@ Analyze the edges of the given DIRECTED graph by applying DFS starting from the 
 ![image](https://user-images.githubusercontent.com/83876261/233844742-9c9f6c3a-96a4-442f-bf8b-836f78338827.png)
 
 # Output time
-![image](https://user-images.githubusercontent.com/83876261/233844917-f62b9777-288d-4573-a9cf-8fc2181c49ac.png)
+![image](https://user-images.githubusercontent.com/83876261/235367117-f9068915-5d96-4147-b4dd-01687fbd35a9.png)
